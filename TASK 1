@@ -1,0 +1,35 @@
+#include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+const char* ssid = "YourWiFiSSID";
+const char* password = "YourWiFiPassword";
+const char* host = "api.yourserver.com"; // Replace with your cloud service URL
+WiFiClient client;
+void setup() {
+  Serial.begin(115200);
+  delay(10);
+  // Connect to Wi-Fi
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+void loop() {
+  if (client.connect(host, 80)) {
+    Serial.println("Connected to server");
+    // Check for commands from cloud service or app/web interface
+    // Example: if command received is "LIGHT_ON", activate relay pin
+    // Example: if command received is "LIGHT_OFF", deactivate relay pin
+    client.stop(); // Close connection
+  } else {
+    Serial.println("Connection to server failed");
+  }
+  delay(10000); // Check for commands every 10 seconds
+}
